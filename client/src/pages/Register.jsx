@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,6 +7,7 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [err, setError] = useState(null);
 
@@ -19,6 +19,10 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (inputs.password !== inputs.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     try {
       await axios.post("/auth/register", inputs);
       navigate("/login");
@@ -50,6 +54,13 @@ const Register = () => {
           type="password"
           placeholder="password"
           name="password"
+          onChange={handleChange}
+        />
+        <input
+          required
+          type="password"
+          placeholder="confirm password"
+          name="confirmPassword"
           onChange={handleChange}
         />
         <button onClick={handleSubmit}>Register</button>
